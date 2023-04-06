@@ -6,7 +6,7 @@
     <div class="w-100">
         {% if user.is_superuser %}
         <div class="d-flex flex-row-reverse m-3">
-            <button type="button" class="btn btn-info" id="sync">Sync</button>
+            <button type="button" class="btn btn-info" style="width:75px;" id="sync">Sync</button>
             <p class="text-center my-auto mx-3 text-info">Last synchronized: {{ sync_date }}</p>
         </div>
         {% endif %}

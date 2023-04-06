@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.db import IntegrityError
 from datetime import datetime
@@ -91,7 +91,17 @@ def register(request):
 
 
 def sync_db(request):
-    #sync_record = Sync(last_sync=datetime.now())
-    #sync_record.save()
+    
+    if request.method == "POST":
+        if Sync.objects.filter(id=1).exists():
+            sync_record = Sync.objects.get(id=1)
+            sync_record.last_sync = datetime.now()
+        else:
+            sync_record = Sync(last_sync=datetime.now())
+        
+        sync_record.save()
 
-    return HttpResponseRedirect(reverse("index"))
+    return(JsonResponse({
+        "last_sync": sync_record.last_sync
+        }, 
+        status=200))
