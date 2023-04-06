@@ -1,0 +1,12 @@
+.body {
+  padding: 5px;
+  display: flex;
+  min-height: 90vh;
+}
+
+.centered {
+  place-items: center;
+  display: flex;
+  min-width: 320px;
+  width: 50%;
+}

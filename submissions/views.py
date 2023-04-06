@@ -3,12 +3,39 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.db import IntegrityError
+from datetime import datetime
+import requests
 
-from .models import User
+from .models import User, Sync, Repo
 
 
 def index(request):
-    return render(request, "submissions/index.html")
+
+    repoOwner = "fabimass"
+    repoName = "class-report"
+
+    query_url = f"https://api.github.com/repos/{repoOwner}/{repoName}/branches"
+    params = {
+        "per_page": 100
+    }
+    headers = {
+        "Accept": "application/vnd.github.v3+json"
+    }
+
+    branches = requests.get(query_url, headers=headers, params=params).json()
+
+    if Sync.objects.filter(id=1).exists():
+        sync_date = Sync.objects.get(id=1).last_sync
+    else:
+        sync_date = "No data"
+
+    if request.user.is_authenticated:
+        return render(request, "submissions/index.html", {
+            "students": branches,
+            "sync_date": sync_date
+        })
+    else:
+        return HttpResponseRedirect(reverse("login"))
 
 
 def login_view(request):
@@ -25,7 +52,7 @@ def login_view(request):
             return HttpResponseRedirect(reverse("index"))
         else:
             return render(request, "submissions/login.html", {
-                "message": "Invalid username and/or password."
+                "message": "Invalid credentials"
             })
     else:
         return render(request, "submissions/login.html")
@@ -46,7 +73,7 @@ def register(request):
         confirmation = request.POST["confirmation"]
         if password != confirmation:
             return render(request, "submissions/register.html", {
-                "message": "Passwords must match."
+                "message": "Passwords must match"
             })
 
         # Attempt to create new user
@@ -55,7 +82,7 @@ def register(request):
             user.save()
         except IntegrityError:
             return render(request, "submissions/register.html", {
-                "message": "Username already taken."
+                "message": "Username already taken"
             })
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
@@ -63,5 +90,8 @@ def register(request):
         return render(request, "submissions/register.html")
 
 
+def sync_db(request):
+    #sync_record = Sync(last_sync=datetime.now())
+    #sync_record.save()
 
-
+    return HttpResponseRedirect(reverse("index"))
