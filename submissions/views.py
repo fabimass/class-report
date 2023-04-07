@@ -32,6 +32,7 @@ def index(request):
     if request.user.is_authenticated:
         return render(request, "submissions/index.html", {
             "students": branches,
+            "commits": ["test1", "test2", "test3", "test4"],
             "sync_date": sync_date
         })
     else:
