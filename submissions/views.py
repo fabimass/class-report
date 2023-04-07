@@ -6,7 +6,7 @@ from django.db import IntegrityError
 from datetime import datetime
 import requests
 
-from .models import User, Sync, Repo
+from .models import User, Sync, Repo, Commit
 
 
 def index(request):
@@ -32,7 +32,7 @@ def index(request):
     if request.user.is_authenticated:
         return render(request, "submissions/index.html", {
             "students": branches,
-            "commits": ["test1", "test2", "test3", "test4"],
+            "commits": Commit.objects.all(),
             "sync_date": sync_date
         })
     else:
