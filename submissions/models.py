@@ -22,3 +22,21 @@ class Repo(models.Model):
     def clean(self):
         if self.private == True and self.token is '':
             raise ValidationError('Token is required for private repos')
+        
+
+class Commit(models.Model):
+    name = models.CharField(max_length=99)
+    deadline = models.DateTimeField()
+    repo = models.ForeignKey(Repo, on_delete=models.CASCADE, related_name="commits")
+
+    def __str__(self):
+        return f"{self.repo}/{self.name}"
+
+
+class Branch(models.Model):
+    name = models.CharField(max_length=99)
+    repo = models.ForeignKey(Repo, on_delete=models.CASCADE, related_name="branches")
+    commits = models.ManyToManyField(Commit, blank=True, related_name="commits")
+
+    def __str__(self):
+        return f"{self.repo}/{self.name}"
