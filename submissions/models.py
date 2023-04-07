@@ -26,7 +26,6 @@ class Repo(models.Model):
 
 class Commit(models.Model):
     name = models.CharField(max_length=99)
-    deadline = models.DateTimeField()
     repo = models.ForeignKey(Repo, on_delete=models.CASCADE, related_name="commits")
 
     def __str__(self):
