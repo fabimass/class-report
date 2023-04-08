@@ -20,7 +20,7 @@
                         {% for commit in commits %} 
                         
                             {% if forloop.counter > 1 %} 
-                                <div class="flex-grow-1">
+                                <div class="flex-grow-1" style="max-width:100px">
                                     <div style="height:25%" class="border-bottom"></div>
                                 </div>
                             {% endif %}
@@ -35,7 +35,7 @@
                             </div>
 
                             {% if forloop.counter < commits|length %} 
-                                <div class="flex-grow-1">
+                                <div class="flex-grow-1" style="max-width:100px">
                                     <div style="height:25%" class="border-bottom"></div>
                                 </div>
                             {% endif %}
