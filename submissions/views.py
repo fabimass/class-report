@@ -84,14 +84,6 @@ def register(request):
 def sync_db(request):
     
     if request.method == "POST":
-
-        params = {
-            "per_page": 100
-        }
-        headers = {
-            "Accept": "application/vnd.github.v3+json",
-            "Authorization": "Bearer ..."
-        }
         
         # Update branches table
         Branch.objects.all().delete()
@@ -99,6 +91,18 @@ def sync_db(request):
         for repo in Repo.objects.all():
             repoOwner = repo.owner
             repoName = repo.name
+            params = {
+                "per_page": 100
+            }
+            if repo.private:
+                headers = {
+                    "Accept": "application/vnd.github.v3+json",
+                    "Authorization": f"Bearer {repo.token}"
+                }
+            else:
+                headers = {
+                    "Accept": "application/vnd.github.v3+json"
+                }
 
             # Pull all the branches for the given repo
             branches_url = f"https://api.github.com/repos/{repoOwner}/{repoName}/branches"
