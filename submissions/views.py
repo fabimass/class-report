@@ -6,26 +6,16 @@ from django.db import IntegrityError
 from datetime import datetime
 import requests
 
-from .models import User, Sync, Repo, Commit
+from .models import User, Sync, Repo, Commit, Branch
 
 
 def index(request):
 
-    repoOwner = "fabimass"
-    repoName = "class-report"
+    branches = []
 
-    query_url = f"https://api.github.com/repos/{repoOwner}/{repoName}/branches"
-    params = {
-        "per_page": 100
-    }
-    headers = {
-        "Accept": "application/vnd.github.v3+json"
-    }
-
-    branches = requests.get(query_url, headers=headers, params=params).json()
-
-    if Sync.objects.filter(id=1).exists():
-        sync_date = Sync.objects.get(id=1).last_sync
+    sync_data = Sync.objects.all()
+    if sync_data.count() > 0:
+        sync_date = sync_data[0].last_sync
     else:
         sync_date = "No data"
 
@@ -94,12 +84,32 @@ def register(request):
 def sync_db(request):
     
     if request.method == "POST":
-        if Sync.objects.filter(id=1).exists():
-            sync_record = Sync.objects.get(id=1)
-            sync_record.last_sync = datetime.now()
-        else:
-            sync_record = Sync(last_sync=datetime.now())
         
+        # Update branches table
+        Branch.objects.all().delete()
+        
+        for repo in Repo.objects.all():
+            repoOwner = repo.owner
+            repoName = repo.name
+
+            # Pull all the branches for the given repo
+            query_url = f"https://api.github.com/repos/{repoOwner}/{repoName}/branches"
+            params = {
+                "per_page": 100
+            }
+            headers = {
+                "Accept": "application/vnd.github.v3+json"
+            }
+
+            branches = requests.get(query_url, headers=headers, params=params).json()
+
+            for branch in branches:
+                print(branch)
+                Branch(name=branch["name"], repo=repo).save()
+
+        # Update last sync record
+        Sync.objects.all().delete()
+        sync_record = Sync(last_sync=datetime.now())
         sync_record.save()
 
     return(JsonResponse({
