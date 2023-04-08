@@ -109,16 +109,18 @@ def sync_db(request):
             branches = requests.get(branches_url, headers=headers, params=params).json()
 
             for branch in branches:
-                Branch(name=branch["name"], repo=repo).save()
+                # Avoid main branch
+                if branch["name"] != "main":
+                    Branch(name=branch["name"], repo=repo).save()
 
-                # Pull all the commits
-                commits_url = f"https://api.github.com/repos/{repoOwner}/{repoName}/commits?sha={branch['name']}"
-                commits = requests.get(commits_url, headers=headers, params=params).json()
-                
-                # Compare the existing commits with the ones registered in the commits table
-                for commit in commits:
-                    if Commit.objects.filter(name=commit["commit"]["message"], repo=repo).exists():
-                        Branch.objects.get(name=branch["name"], repo=repo).commits.add(Commit.objects.get(name=commit["commit"]["message"], repo=repo)) 
+                    # Pull all the commits
+                    commits_url = f"https://api.github.com/repos/{repoOwner}/{repoName}/commits?sha={branch['name']}"
+                    commits = requests.get(commits_url, headers=headers, params=params).json()
+                    
+                    # Compare the existing commits with the ones registered in the commits table
+                    for commit in commits:
+                        if Commit.objects.filter(name=commit["commit"]["message"], repo=repo).exists():
+                            Branch.objects.get(name=branch["name"], repo=repo).commits.add(Commit.objects.get(name=commit["commit"]["message"], repo=repo)) 
 
         # Update last sync record
         Sync.objects.all().delete()
