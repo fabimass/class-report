@@ -84,6 +84,14 @@ def register(request):
 def sync_db(request):
     
     if request.method == "POST":
+
+        params = {
+            "per_page": 100
+        }
+        headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": "Bearer ..."
+        }
         
         # Update branches table
         Branch.objects.all().delete()
@@ -93,19 +101,20 @@ def sync_db(request):
             repoName = repo.name
 
             # Pull all the branches for the given repo
-            query_url = f"https://api.github.com/repos/{repoOwner}/{repoName}/branches"
-            params = {
-                "per_page": 100
-            }
-            headers = {
-                "Accept": "application/vnd.github.v3+json"
-            }
-
-            branches = requests.get(query_url, headers=headers, params=params).json()
+            branches_url = f"https://api.github.com/repos/{repoOwner}/{repoName}/branches"
+            branches = requests.get(branches_url, headers=headers, params=params).json()
 
             for branch in branches:
-                print(branch)
                 Branch(name=branch["name"], repo=repo).save()
+
+                # Pull all the commits
+                commits_url = f"https://api.github.com/repos/{repoOwner}/{repoName}/commits?sha={branch['name']}"
+                commits = requests.get(commits_url, headers=headers, params=params).json()
+                
+                # Compare the existing commits with the ones registered in the commits table
+                for commit in commits:
+                    if Commit.objects.filter(name=commit["commit"]["message"], repo=repo).exists():
+                        Branch.objects.get(name=branch["name"], repo=repo).commits.add(Commit.objects.get(name=commit["commit"]["message"], repo=repo)) 
 
         # Update last sync record
         Sync.objects.all().delete()

@@ -7,4 +7,4 @@ class BranchAdmin(admin.ModelAdmin):
 admin.site.register(User)
 admin.site.register(Repo)
 admin.site.register(Commit)
-admin.site.register(Branch)
+admin.site.register(Branch, BranchAdmin)
