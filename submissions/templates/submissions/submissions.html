@@ -1,0 +1,58 @@
+{% extends "submissions/layout.html" %}
+{% load static %}
+
+{% block body %}
+  
+    <div class="w-100">
+        {% if user.is_superuser %}
+        <div class="d-flex flex-row-reverse m-3">
+            <button type="button" class="btn btn-info" style="width:75px;" id="sync">Sync</button>
+            <p class="text-center my-auto mx-3 text-info">Last synchronized: {{ sync_date }}</p>
+        </div>
+        {% endif %}
+
+        <div>
+        
+            <div class="card mx-md-5 px-md-5 px-sm-1 py-3 bg-dark border-0">
+                <div class="card-body">
+                    <h5 class="card-title text-light">test</h5>
+                    <div class="mb-4 mt-4 d-flex row">
+                        {% for commit in commits %} 
+                        
+                            {% if forloop.counter > 1 %} 
+                                <div class="flex-grow-1" style="max-width:100px">
+                                    <div style="height:25%" class="border-bottom"></div>
+                                </div>
+                            {% endif %}
+
+                            <div style="width:60px; height:150px" class="d-flex flex-column">
+                                <div style="height:50%; display: flex; align-items: center; justify-content: center;">
+                                    <h2 class="text-center text-sm">✅</h2>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <p style="transform:rotate(-40deg) translate(-15px, -15px)" class="text-light text-right"><small>{{ commit.name }}</small></p>
+                                </div>
+                            </div>
+
+                            {% if forloop.counter < commits|length %} 
+                                <div class="flex-grow-1" style="max-width:100px">
+                                    <div style="height:25%" class="border-bottom"></div>
+                                </div>
+                            {% endif %}
+                                
+                        {% endfor %}
+                    </div>  
+                </div>
+            </div>
+            
+
+        </div>
+    </div>
+
+    
+
+{% endblock %}
+
+{% block scripts %} 
+    {% if user.is_superuser %}<script src="{% static 'submissions/sync.js' %}"></script>{% endif %}
+{% endblock %}

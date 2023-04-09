@@ -11,8 +11,6 @@ from .models import User, Sync, Repo, Commit, Branch
 
 def index(request):
 
-    branches = []
-
     sync_data = Sync.objects.all()
     if sync_data.count() > 0:
         sync_date = sync_data[0].last_sync
@@ -21,8 +19,7 @@ def index(request):
 
     if request.user.is_authenticated:
         return render(request, "submissions/index.html", {
-            "students": branches,
-            "commits": Commit.objects.all(),
+            "repos": Repo.objects.all(),
             "sync_date": sync_date
         })
     else:
