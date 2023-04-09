@@ -1,38 +1,23 @@
 {% extends "submissions/layout.html" %}
 {% load static %}
 
+{% block title %}
+    All Repos
+{% endblock %}
+
 {% block body %}
   
-    <div class="w-100">
-        {% if user.is_superuser %}
-        <div class="row">
-            <div class="col">
-                <h1 class="h-100 d-flex align-items-center justify-content-center justify-content-md-start mx-3 text-light"><p>All Repos</p></h1>
-            </div>
-            <div class="col">
-                <div class="d-flex flex-row-reverse m-3">
-                    <button type="button" class="btn btn-info" style="width:75px;" id="sync">Sync</button>
-                    <p class="text-center my-auto mx-3 text-info">Last synchronized: {{ sync_date }}</p> 
-                </div>
-            </div>
-        </div>
-        {% endif %}
-
-        <div class="p-5">
-            <ul class="text-light">
-            {% for repo in repos %}
-                <li>
-                    <a class="text-info" href="#">{{ repo }}</a>
-                </li>
-            {% endfor %}
-            </ul>
-        </div>
+    <div class="p-5">
+        <ul class="text-light">
+        {% for repo in repos %}
+            <li>
+                <a class="text-info" href="#">{{ repo }}</a>
+            </li>
+        {% endfor %}
+        </ul>
     </div>
-
-    
 
 {% endblock %}
 
 {% block scripts %} 
-    {% if user.is_superuser %}<script src="{% static 'submissions/sync.js' %}"></script>{% endif %}
 {% endblock %}

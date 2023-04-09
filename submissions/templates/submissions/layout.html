@@ -7,7 +7,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>{% block title %}Class Report{% endblock %}</title>
+    <title>Class Report</title>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -18,6 +18,9 @@
     <script>
       var CSRF_TOKEN = "{{ csrf_token }}";
     </script>
+    {% if user.is_superuser %}
+    <script src="{% static 'submissions/sync.js' %}"></script>
+    {% endif %}
     {% block scripts %} {% endblock %}
   </head>
   <body class="bg-dark">
@@ -58,9 +61,28 @@
         </ul>
       </div>
     
-  
     </nav>
 
-    <div class="body">{% block body %} {% endblock %}</div>
+    <div class="body">
+      <div class="w-100">
+        {% if user.is_superuser %}
+        <div class="row">
+            <div class="col">
+                <h1 class="h-100 d-flex align-items-center justify-content-center justify-content-md-start mx-3 text-light"><p>{% block title %}{% endblock %}</p></h1>
+            </div>
+            <div class="col">
+                <div class="d-flex flex-row-reverse m-3">
+                    <button type="button" class="btn btn-info" style="width:75px;" id="sync">Sync</button>
+                    <p class="text-center my-auto mx-3 text-info">Last synchronized: {{ sync_date }}</p> 
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% block body %} 
+        {% endblock %}
+      </div>
+    </div>
+
   </body>
 </html>
