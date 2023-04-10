@@ -11,7 +11,7 @@
         <ul class="text-light">
         {% for repo in repos %}
             <li>
-                <a class="text-info" href="#">{{ repo }}</a>
+                <a class="text-info" href="{% url 'submissions' repo.owner repo.name %}">{{ repo }}</a>
             </li>
         {% endfor %}
         </ul>
