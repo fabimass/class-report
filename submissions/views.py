@@ -7,23 +7,32 @@ from datetime import datetime
 import requests
 
 from .models import User, Sync, Repo, Commit, Branch
+from .utils import get_sync_date
 
 
 def index(request):
 
-    sync_data = Sync.objects.all()
-    if sync_data.count() > 0:
-        sync_date = sync_data[0].last_sync
-    else:
-        sync_date = "No data"
+    
 
     if request.user.is_authenticated:
         return render(request, "submissions/index.html", {
             "repos": Repo.objects.all(),
-            "sync_date": sync_date
+            "sync_date": get_sync_date()
         })
     else:
         return HttpResponseRedirect(reverse("login"))
+    
+
+def submissions(request, repo_owner, repo_name):
+    
+    if request.user.is_authenticated:
+        return render(request, "submissions/index.html", {
+            "repos": Repo.objects.all(),
+            "sync_date": get_sync_date()
+        })
+    else:
+        return HttpResponseRedirect(reverse("login"))
+
 
 
 def login_view(request):
