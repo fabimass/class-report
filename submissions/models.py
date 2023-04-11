@@ -30,12 +30,15 @@ class Commit(models.Model):
 
     def __str__(self):
         return f"{self.repo}/{self.name}"
+    
+    def is_submitted(self, branch):
+        return self.branches.filter(id=branch.id).exists()
 
 
 class Branch(models.Model):
     name = models.CharField(max_length=99)
     repo = models.ForeignKey(Repo, on_delete=models.CASCADE, related_name="branches")
-    commits = models.ManyToManyField(Commit, blank=True, related_name="commits")
+    commits = models.ManyToManyField(Commit, blank=True, related_name="branches")
 
     def __str__(self):
         return f"{self.repo}/{self.name}"

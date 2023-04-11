@@ -34,7 +34,17 @@ def submissions(request, repo_owner, repo_name):
         })
     else:
         return HttpResponseRedirect(reverse("login"))
+    
 
+def is_submitted(request, repo_owner, repo_name, branch_name, commit_name):
+
+    repo = Repo.objects.get(owner=repo_owner, name=repo_name)
+    branch = Branch.objects.get(name=branch_name, repo=repo)
+    commit = Commit.objects.get(name=commit_name, repo=repo)
+
+    return(JsonResponse({
+        "submitted": commit.is_submitted(branch)}, 
+        status=200))    
 
 
 def login_view(request):
