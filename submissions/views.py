@@ -12,9 +12,15 @@ from .utils import get_sync_date
 
 def index(request):
 
+    if request.user.is_superuser:
+        repos = Repo.objects.all()
+    else:
+        repo_list = Branch.objects.filter(name=request.user.username).values_list('repo', flat=True)
+        repos = Repo.objects.filter(id__in=repo_list)
+
     if request.user.is_authenticated:
         return render(request, "submissions/index.html", {
-            "repos": Repo.objects.all(),
+            "repos": repos,
             "sync_date": get_sync_date()
         })
     else:
