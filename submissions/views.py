@@ -12,13 +12,14 @@ from .utils import get_sync_date, process_branches
 
 def index(request):
 
-    if request.user.is_superuser:
-        repos = Repo.objects.all()
-    else:
-        repo_list = Branch.objects.filter(name=request.user.username).values_list('repo', flat=True)
-        repos = Repo.objects.filter(id__in=repo_list)
-
     if request.user.is_authenticated:
+
+        if request.user.is_superuser:
+            repos = Repo.objects.all()
+        else:
+            repo_list = Branch.objects.filter(name=request.user.username).values_list('repo', flat=True)
+            repos = Repo.objects.filter(id__in=repo_list)
+
         return render(request, "submissions/index.html", {
             "repos": repos,
             "sync_date": get_sync_date()
@@ -28,18 +29,19 @@ def index(request):
     
 
 def submissions(request, repo_owner, repo_name):
-    
-    repo = Repo.objects.get(owner=repo_owner, name=repo_name)
-    commits = repo.commits.all()
-
-    if request.user.is_superuser:
-        branches = repo.branches.all()
-    else:
-        branches = repo.branches.filter(name=request.user.username)
-
-    branches = process_branches(branches, commits)
 
     if request.user.is_authenticated:
+
+        repo = Repo.objects.get(owner=repo_owner, name=repo_name)
+        commits = repo.commits.all()
+
+        if request.user.is_superuser:
+            branches = repo.branches.all()
+        else:
+            branches = repo.branches.filter(name=request.user.username)
+
+        branches = process_branches(branches, commits)
+
         return render(request, "submissions/submissions.html", {
             "commits": repo.commits.all(),
             "branches": branches,
