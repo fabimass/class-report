@@ -25,7 +25,13 @@
   </head>
   <body class="bg-dark">
     <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
-      <a class="navbar-brand" href="#">Class Report</a>
+      <a class="navbar-brand" href="">
+        {% if user.is_authenticated %}
+          {{ user.username }}
+        {% else %} 
+          Class Report
+        {% endif %}
+        </a>
       
       <div>
         <ul class="navbar-nav mr-auto">
@@ -33,9 +39,21 @@
             <li class="nav-item">
               <a class="nav-link {% if request.path == index_url %}active{% endif %}" 
               href="{% url 'index' %}"
-              ><strong>{{ user.username }}</strong></a>
+              >{% if user.is_superuser %} 
+                  All Classes
+               {% else %} 
+                  My Classes
+               {% endif %}</a>
             </li>
-            {% endif %} {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link " 
+              href=""
+              >{% if user.is_superuser %} 
+                  All Submissions
+               {% else %} 
+                  My Submissions
+               {% endif %}</a>
+            </li>
             <li class="nav-item">
               <a 
                 class="nav-link {% if request.path == logout_url %}active{% endif %}" 
@@ -63,7 +81,7 @@
     
     </nav>
 
-    <div class="w-100">
+    <div class="w-100 mt-2">
       <div class="row">
           <div class="col">
               <h3 class="h-100 d-flex align-items-center justify-content-center justify-content-md-start mx-3 text-light"><p>{% block title %}{% endblock %}</p></h3>

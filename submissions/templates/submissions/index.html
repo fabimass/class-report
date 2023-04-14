@@ -2,7 +2,11 @@
 {% load static %}
 
 {% block title %}
-    All Repos
+    {% if user.is_superuser %} 
+        All Classes
+    {% else %} 
+        My Classes
+    {% endif %}
 {% endblock %}
 
 {% block body %}
