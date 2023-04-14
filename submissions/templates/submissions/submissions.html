@@ -17,10 +17,10 @@
                         <div class="flex-grow-1">
                             <div class="d-flex">
                                 <div class="d-flex flex-grow-1">
-                                    <div class="w-{{ branch.completion }} completion-bar" style="border-color: limegreen;"></div>
+                                    <div class="completion-bar" style="--progress: {{ branch.completion }}%; --delay: 1s;border-color: #00d26a;"></div>
                                     <div class="flex-grow-1 completion-bar"></div>
                                 </div>
-                                <div class="completion-circle">
+                                <div class="completion-circle {% if branch.completion == 100 %} completion-circle-100p {% endif %}" style="--delay: 2s;">
                                     {{ branch.completion }}%
                                 </div>
                             </div>
@@ -28,11 +28,11 @@
                                 {% for commit in branch.commits %} 
                                 
                                     {% if forloop.counter > 1 %} 
-                                        <div class="flex-grow-1" style="max-width:100px">
+                                        <div class="flex-grow-1 fade-in" style="max-width:200px; --delay: {{ forloop.counter }}s;">
                                             <div style="height:25%" class="border-bottom"></div>
                                         </div>
                                     {% endif %}
-                                    <div style="width:60px; height:150px" class="d-flex flex-column">
+                                    <div style="width:60px; height:150px; --delay: {{ forloop.counter }}s;" class="d-flex flex-column fade-in">
                                         <div style="height:50%; display: flex; align-items: center; justify-content: center;">
                                             <h2 class="text-center text-sm commit">
                                                 {% if commit.submitted %} 
@@ -45,11 +45,6 @@
                                             <p style="transform:rotate(-40deg) translate(-15px, -15px)" class="text-light text-right"><small>{{ commit.name }}</small></p>
                                         </div>
                                     </div>
-                                    {% if forloop.counter < commits|length %} 
-                                        <div class="flex-grow-1" style="max-width:100px">
-                                            <div style="height:25%" class="border-bottom"></div>
-                                        </div>
-                                    {% endif %}
                                         
                                 {% endfor %}
                             </div>

@@ -24,8 +24,37 @@
   font-size: 16px
 }
 
+.completion-circle-100p {
+  animation: change-color var(--delay) forwards;
+}
+
 .completion-bar {
   height:52%;
   border-bottom: 1px solid #f8f9fa; 
   border-width: 3px; 
+  animation: progress-bar-animation var(--delay) linear;
+  animation-fill-mode: forwards;
+}
+
+.fade-in {
+  animation: fadeIn var(--delay) ease-in-out forwards;
+}
+
+@keyframes progress-bar-animation {
+  from { width: 0%; }
+  to { width: var(--progress); }
+}
+
+@keyframes change-color {
+  from { background-color: #343a40; }
+  to { background-color: #00d26a; }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
