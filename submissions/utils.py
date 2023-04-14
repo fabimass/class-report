@@ -19,9 +19,11 @@ def process_branches(branches, commits):
                 "submitted": commit.is_submitted(branch)
             })
 
+        completionPerc = int(( len(branch.commits.all()) / len(commits) ) * 100)
+
         processedBranches.append({
             "name": branch.name,
             "commits": processedCommits,
-            "percentage": branch.commits.all().count
+            "completion": completionPerc
         })
     return processedBranches
