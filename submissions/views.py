@@ -31,10 +31,15 @@ def submissions(request, repo_owner, repo_name):
     
     repo = Repo.objects.get(owner=repo_owner, name=repo_name)
 
+    if request.user.is_superuser:
+        branches = repo.branches.all()
+    else:
+        branches = repo.branches.filter(name=request.user.username)
+
     if request.user.is_authenticated:
         return render(request, "submissions/submissions.html", {
             "commits": repo.commits.all(),
-            "branches": repo.branches.all(),
+            "branches": branches,
             "repo": repo,
             "sync_date": get_sync_date()
         })
