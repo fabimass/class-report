@@ -17,9 +17,15 @@
   display: flex; 
   align-items: center; 
   justify-content: center; 
-  border: 2px solid #f8f9fa; 
+  border: 1px solid #f8f9fa; 
   border-width: 3px; 
   border-radius: 50%;
   color: #f8f9fa; 
   font-size: 16px
+}
+
+.completion-bar {
+  height:52%;
+  border-bottom: 1px solid #f8f9fa; 
+  border-width: 3px; 
 }

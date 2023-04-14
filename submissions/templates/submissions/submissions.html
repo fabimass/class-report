@@ -16,7 +16,10 @@
                         <div class="flex-grow-1"></div>
                         <div class="flex-grow-1">
                             <div class="d-flex">
-                                <div class="flex-grow-1"></div>
+                                <div class="d-flex flex-grow-1">
+                                    <div class="w-{{ branch.completion }} completion-bar" style="border-color: limegreen;"></div>
+                                    <div class="flex-grow-1 completion-bar"></div>
+                                </div>
                                 <div class="completion-circle">
                                     {{ branch.completion }}%
                                 </div>
