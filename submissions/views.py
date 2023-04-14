@@ -7,7 +7,7 @@ from datetime import datetime
 import requests
 
 from .models import User, Sync, Repo, Commit, Branch
-from .utils import get_sync_date
+from .utils import get_sync_date, process_branches
 
 
 def index(request):
@@ -30,11 +30,14 @@ def index(request):
 def submissions(request, repo_owner, repo_name):
     
     repo = Repo.objects.get(owner=repo_owner, name=repo_name)
+    commits = repo.commits.all()
 
     if request.user.is_superuser:
         branches = repo.branches.all()
     else:
         branches = repo.branches.filter(name=request.user.username)
+
+    branches = process_branches(branches, commits)
 
     if request.user.is_authenticated:
         return render(request, "submissions/submissions.html", {

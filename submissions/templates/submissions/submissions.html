@@ -9,11 +9,11 @@
   
     <div>
         {% for branch in branches %}
-            <div class="card mx-md-5 px-md-5 px-sm-1 py-3 bg-dark border-0">
+            <div class="card mx-md-5 px-md-5 px-sm-1 py-3 bg-dark border-0 text-md-center">
                 <div class="card-body">
                     <h5 class="card-title text-light">{{ branch.name }}</h5>
-                    <div class="mb-4 mt-4 d-flex row">
-                        {% for commit in commits %} 
+                    <div class="mb-4 mt-4 d-flex row justify-content-center">
+                        {% for commit in branch.commits %} 
                         
                             {% if forloop.counter > 1 %} 
                                 <div class="flex-grow-1" style="max-width:100px">
@@ -22,7 +22,12 @@
                             {% endif %}
                             <div style="width:60px; height:150px" class="d-flex flex-column">
                                 <div style="height:50%; display: flex; align-items: center; justify-content: center;">
-                                    <h2 class="text-center text-sm commit" id="{{ repo.owner }}/{{ repo.name }}/{{ branch.name }}/{{ commit.name }}">❔</h2>
+                                    <h2 class="text-center text-sm commit">
+                                        {% if commit.submitted %} 
+                                            ✅
+                                        {% else %}
+                                            ❔
+                                        {% endif %}</h2>
                                 </div>
                                 <div class="flex-grow-1">
                                     <p style="transform:rotate(-40deg) translate(-15px, -15px)" class="text-light text-right"><small>{{ commit.name }}</small></p>
@@ -46,5 +51,4 @@
 {% endblock %}
 
 {% block scripts %} 
-<script src="{% static 'submissions/commits.js' %}"></script>
 {% endblock %}

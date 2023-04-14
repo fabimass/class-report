@@ -6,3 +6,22 @@ def get_sync_date():
         return sync_data[0].last_sync
     else:
         return "No data"
+    
+
+def process_branches(branches, commits):
+    processedBranches = []
+    for branch in branches:
+        processedCommits = []
+        
+        for commit in commits:
+            processedCommits.append({
+                "name": commit.name,
+                "submitted": commit.is_submitted(branch)
+            })
+
+        processedBranches.append({
+            "name": branch.name,
+            "commits": processedCommits,
+            "percentage": branch.commits.all().count
+        })
+    return processedBranches
