@@ -150,6 +150,9 @@ def sync_db(request):
         sync_record = Sync(last_sync=datetime.now())
         sync_record.save()
 
+    if request.method == "GET":
+        sync_record = Sync.objects.all()[0]
+
     return(JsonResponse({
         "last_sync": sync_record.last_sync
         }, 
