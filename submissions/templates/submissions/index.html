@@ -11,12 +11,12 @@
 
 {% block body %}
   
-    <div class="p-5">
-        <ul class="text-light">
+    <div class="py-5 px-md-5 mx-md-5 d-flex align-items-center justify-content-center justify-content-md-start">
+        <ul class="text-light p-1">
         {% for repo in repos %}
-            <li>
-                <a class="text-info" href="{% url 'submissions' repo.owner repo.name %}">{{ repo }}</a>
-            </li>
+            <div>
+                <h4>📂<a class="text-info" href="{% url 'submissions' repo.owner repo.name %}">{{ repo }}</a></h4>
+            </div>
         {% endfor %}
         </ul>
     </div>
