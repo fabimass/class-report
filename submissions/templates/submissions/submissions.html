@@ -7,9 +7,9 @@
 
 {% block body %}
   
-    <div>
+    <div id="branch-list">
         {% for branch in branches %}
-            <div class="card mx-md-5 px-md-5 px-sm-1 py-3 bg-dark border-0 text-md-center">
+            <div class="card mx-md-5 px-md-5 px-sm-1 py-3 bg-dark border-0 text-md-center branch">
                 <div class="card-body">
                     <h5 class="card-title text-light">{{ branch.name }}</h5>
                     <div class="mb-4 mt-4 d-flex row">
@@ -60,5 +60,6 @@
 
 {% endblock %}
 
-{% block scripts %} 
+{% block scripts %}
+<script src="{% static 'submissions/search-branches.js' %}"></script> 
 {% endblock %}

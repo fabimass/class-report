@@ -9,11 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const search = (input, allRepos) => {
     
-    const filteredArray = [...allRepos].filter(element => element.innerHTML.includes(input));
+    const filteredArray = [...allRepos].filter(element => element.children[0].children[0].innerHTML.includes(input));
 
     let searchResults = '';
 
-    filteredArray.forEach( (element) => searchResults += `<div><h4>📂<a class="text-info repo" href="${element.href}">${element.innerHTML}</a></h4></div>`);
+    filteredArray.forEach( (element) => searchResults += element.outerHTML );
    
     document.querySelector('#repo-list').innerHTML = searchResults;
 }

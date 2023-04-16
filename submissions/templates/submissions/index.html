@@ -14,8 +14,8 @@
     <div class="py-5 px-md-5 mx-md-5 d-flex align-items-center justify-content-center justify-content-md-start">
         <ul class="text-light p-1" id="repo-list">
         {% for repo in repos %}
-            <div>
-                <h4>📂<a class="text-info repo" href="{% url 'submissions' repo.owner repo.name %}">{{ repo }}</a></h4>
+            <div class="repo">
+                <h4>📂<a class="text-info" href="{% url 'submissions' repo.owner repo.name %}">{{ repo }}</a></h4>
             </div>
         {% endfor %}
         </ul>
