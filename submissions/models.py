@@ -23,6 +23,9 @@ class Repo(models.Model):
         if self.private == True and self.token is '':
             raise ValidationError('Token is required for private repos')
         
+    def pending_submissions(self):
+        return self.pulls.all()[0].quantity
+        
 
 class Commit(models.Model):
     name = models.CharField(max_length=99)
@@ -42,3 +45,11 @@ class Branch(models.Model):
 
     def __str__(self):
         return f"{self.repo}/{self.name}"
+    
+
+class Pull(models.Model):
+    repo = models.ForeignKey(Repo, on_delete=models.CASCADE, related_name="pulls")
+    quantity = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.repo}: {self.quantity}"

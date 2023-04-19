@@ -14,8 +14,12 @@
     <div class="py-5 px-md-5 mx-md-5 d-flex align-items-center justify-content-center justify-content-md-start">
         <ul class="text-light p-1" id="repo-list">
         {% for repo in repos %}
-            <div class="repo">
-                <h4>📂<a class="text-info" href="{% url 'submissions' repo.owner repo.name %}">{{ repo }}</a></h4>
+            <div class="repo d-flex">
+                <h4>📂<a class="text-info" href="{% url 'submissions' repo.owner repo.name %}">{{ repo }} </a>
+                    {% if repo.pending_submissions > 0 and user.is_superuser %}
+                    <a class="badge badge-warning badge-pill" href="https://github.com/{{ repo.owner }}/{{ repo.name }}/pulls" target="_blank">{{ repo.pending_submissions }} pending submissions</a>
+                    {% endif %}
+                </h4>
             </div>
         {% endfor %}
         </ul>

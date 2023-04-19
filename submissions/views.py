@@ -6,7 +6,7 @@ from django.db import IntegrityError
 from datetime import datetime
 import requests
 
-from .models import User, Sync, Repo, Commit, Branch
+from .models import User, Sync, Repo, Commit, Branch, Pull
 from .utils import get_sync_date, process_branches
 
 
@@ -108,8 +108,9 @@ def sync_db(request):
     
     if request.method == "POST":
         
-        # Update branches table
+        # Clean previous data
         Branch.objects.all().delete()
+        Pull.objects.all().delete()
         
         for repo in Repo.objects.all():
             repoOwner = repo.owner
@@ -144,6 +145,12 @@ def sync_db(request):
                     for commit in commits:
                         if Commit.objects.filter(name=commit["commit"]["message"], repo=repo).exists():
                             Branch.objects.get(name=branch["name"], repo=repo).commits.add(Commit.objects.get(name=commit["commit"]["message"], repo=repo)) 
+
+            # Get all the pull requests for the given repo
+            pulls_url = f"https://api.github.com/repos/{repoOwner}/{repoName}/pulls"
+            pulls = requests.get(pulls_url, headers=headers, params=params).json()
+            Pull(repo=repo, quantity=len(pulls)).save()
+
 
         # Update last sync record
         Sync.objects.all().delete()
