@@ -98,6 +98,7 @@
     
     </nav>
 
+    {% if request.path != register_url and request.path != login_url %}
     <div class="w-100 mt-2">
       <div class="row">
           <div class="col">
@@ -120,6 +121,7 @@
         </div>
       </div>
     </div>
+    {% endif %}
 
     <div class="body">
       <div class="w-100">
