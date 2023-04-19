@@ -11,7 +11,7 @@
         {% for branch in branches %}
             <div class="card mx-md-5 px-md-5 px-sm-1 py-3 bg-dark border-0 text-md-center branch">
                 <div class="card-body">
-                    <h5 class="card-title text-light">{{ branch.name }}</h5>
+                    <h5><a class="card-title text-light" href="https://github.com/{{ repo.owner }}/{{ repo.name }}/tree/{{ branch.name }}" target="_blank">{{ branch.name }}</a></h5>
                     <div class="mb-4 mt-4 d-flex row">
                         <div class="flex-grow-1"></div>
                         <div class="flex-grow-1">
