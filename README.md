@@ -43,15 +43,21 @@ Under submissions folder:
 * urls.py
 
     * / : The home url will show the list of all repos.
+    
     * /<repo_owner>/<repo_name> : Will take you to a page with all the students submissions for the selected repo.
+    
     * /login : Takes you to the login page.
+    
     * /register : Takes you to the register page.
+    
     * /logout : Logout endpoint.
+    
     * /sync : This endpoint is used to trigger the synchronization process.
 
 * utils.py: Some utility functions that I use.
 
     * get_sync_date : Returns the date the last synchronization was made.
+    
     * process_branches : Returns an array of all the branches, enriched with the status of each commit and the overall completion.
 
 * views.py
@@ -98,3 +104,32 @@ In the root:
 
 
 ## How to run the app
+
+------ Professor ------
+
+Prerequisite: You should have a GitHub repository which will represent a class. You should also create some branches representing each student.
+
+1- Create a super user
+
+2- Log in with your user
+
+3- Click on the Admin button located in the upper right corner
+
+4- Add the reference to the repository in the Repo model. You will need the repo owner and the repo name and, in case the repo is private, you will need also to generate a personal access token.
+
+5- Add some submissions in the Commit model (this will be the name of the expected commits)
+
+6- Return to the home page and hit the Sync button and wait for the process to finish.
+
+7- Click on the class name. You will be taken to the submissions page for that repo. You will see a progress bar for each branch, except the main one (one branch for each student). You will see green checks for those registered commits that exist on each branch, those which do not exist will show a question mark.
+
+8- Click on the branch name to be taken to that specific branch on GitHub.
+
+9- Optionally, use the search bar to find specific branches.
+
+
+------- Student -------
+
+1- Register
+
+2- See your progress for each class you are in
