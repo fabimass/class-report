@@ -130,6 +130,6 @@ Prerequisite: You should have a GitHub repository which will represent a class. 
 
 ------- Student -------
 
-1- Register
+1- Register (your username should be the same that is going to be use as your branches name)
 
-2- See your progress for each class you are in
+2- See your progress for each class you are in!
